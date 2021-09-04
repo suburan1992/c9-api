@@ -4,7 +4,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
     },
     centers: {
-      type: Sequelize.STRING,
+      type: Sequelize.JSON,
     },
     fullname: {
       type: Sequelize.STRING,
@@ -96,7 +96,7 @@ module.exports = (sequelize, Sequelize) => {
     pancardno: {
       type: Sequelize.STRING,
     },
-   
+
     bankaccountno: {
       type: Sequelize.STRING,
     },
