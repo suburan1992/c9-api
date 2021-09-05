@@ -15,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
     fathername: {
       type: Sequelize.STRING,
     },
+    Address: {
+      type: Sequelize.STRING,
+    },
     noticeperiod: {
       type: Sequelize.STRING,
     },

@@ -46,6 +46,15 @@ exports.createMany = async (req, res) => {
     verificationRemark: req.body.verificationRemark,
     // docFile: req.file.fieldname,
   };
+
+  console.log(
+    req.file,
+    "1111111111111111111111111111111111111111111111111111111111111111111"
+  );
+  console.log(
+    record,
+    "3333333333333333333333333333333333333333333333333333333333333333333"
+  );
   if (req.files.length > 0) {
     for (let i = 0; i < req.files.length; i++) {
       let rec = { ...record, url: req.files[i].filename };
@@ -89,8 +98,8 @@ exports.findOne = async (req, res) => {
   try {
     records = await Document.findAndCountAll({
       where: condition,
-      limit: limit,
-      offset: offset,
+      // limit: limit,
+      // offset: offset,
     });
     res
       .status(201)
@@ -103,13 +112,13 @@ exports.findOne = async (req, res) => {
 exports.list = async (req, res) => {
   const page = req.query.page;
   const size = req.query.size;
-  const limit = size ? +size : 10;
+  const limit = size ? +size : 5;
   const offset = page ? page * limit : 0;
   ///////// where clause ///////////////
   const doctorId = req.body.doctorId;
   var condition = doctorId ? { doctorId: { [Op.eq]: doctorId } } : 0;
   try {
-    records = await Document.findAndCountAll({ limit: limit, offset: offset });
+    records = await Document.findAndCountAll({    });
     res
       .status(201)
       .send({ data: records.rows, total: records.count, message: "Success" });
