@@ -36,10 +36,11 @@ exports.create = (req, res) => {
     category: req.body.category,
     departmentLabel: req.body.departmentLabel,
     centerNames: req.body.centerNames,
+    comments: req.body.comments,
     code: req.body.code,
     status: req.body.status ? req.body.status : false,
   };
-
+   
   // Save Vacancy in the database
   Vacancy.create(vacancy)
     .then((data) => {

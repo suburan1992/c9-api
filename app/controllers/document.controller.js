@@ -156,7 +156,7 @@ exports.updateStatus = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Center.destroy({
+  Document.destroy({
     where: { id: id },
   })
     .then((num) => {

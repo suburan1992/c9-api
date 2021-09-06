@@ -27,6 +27,9 @@ module.exports = (sequelize, Sequelize) => {
         centerNames:{
             type: Sequelize.STRING
         },
+        comments:{
+            type: Sequelize.STRING
+        },
         // centerIds:{
         //     type: Sequelize.STRING
         // },

@@ -50,5 +50,8 @@ module.exports = (app) => {
   router.get("/list/:id", documents.findOne);
   router.get("/download/:name", documents.download);
 
+  // Delete a Document with id
+  router.delete("/:id", documents.delete);
+
   app.use("/api/documents", router);
 };
