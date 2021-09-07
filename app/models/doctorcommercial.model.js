@@ -18,6 +18,9 @@ module.exports = (sequelize, Sequelize) => {
     Address: {
       type: Sequelize.STRING,
     },
+    medicaldegree:  {
+      type: Sequelize.STRING,
+    },
     noticeperiod: {
       type: Sequelize.STRING,
     },

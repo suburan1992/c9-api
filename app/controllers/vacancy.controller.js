@@ -37,10 +37,11 @@ exports.create = (req, res) => {
     departmentLabel: req.body.departmentLabel,
     centerNames: req.body.centerNames,
     comments: req.body.comments,
+    // doctorId: "NA",
     code: req.body.code,
     status: req.body.status ? req.body.status : false,
   };
-   
+
   // Save Vacancy in the database
   Vacancy.create(vacancy)
     .then((data) => {
