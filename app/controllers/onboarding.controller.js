@@ -12,16 +12,13 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Agreement
 exports.create = async (req, res) => {
-  //res.send(req.body)
-
-  // Validate request
   if (!req.body.data.email) {
     res.status(400).send({
       message: "Content can not be empty!",
     });
     return;
   }
-
+  console.log(req.body, "1234567");
   // Create a User
   var doctorId = null;
   try {
@@ -46,27 +43,28 @@ exports.create = async (req, res) => {
     ).catch((err) => {
       throw new Error(500);
     });
-    if (req.body.data.opservice == "Yes") {
-      opservicedata = req.body.opservice;
-      opservicedata[0].doctorId = doctorId;
-      opservicedata[1].doctorId = doctorId;
-      doctoropdata = await DoctorOPParameter.bulkCreate(opservicedata).catch(
-        (err) => {
-          throw new Error(500);
-        }
-      );
-    }
+    // console.log(req.body.data.opservice.length,"123456789");
 
-    if (req.body.data.ipservice == "Yes") {
-      ipservicedata = req.body.ipservice;
-      ipservicedata[0].doctorId = doctorId;
-      ipservicedata[1].doctorId = doctorId;
-      doctoripdata = await DoctorIPParameter.bulkCreate(ipservicedata).catch(
-        (err) => {
-          throw new Error(500);
-        }
-      );
-    }
+    opservicedata = req.body.opservice;
+    opservicedata.forEach((element) => {
+      element.doctorId = doctorId;
+    });
+    doctoropdata = await DoctorOPParameter.bulkCreate(opservicedata).catch(
+      (err) => {
+        throw new Error(500);
+      }
+    );
+
+    ipservicedata = req.body.ipservice;
+    ipservicedata.forEach((element) => {
+      element.doctorId = doctorId;
+    });
+
+    doctoripdata = await DoctorIPParameter.bulkCreate(ipservicedata).catch(
+      (err) => {
+        throw new Error(500);
+      }
+    );
 
     onboardData = {
       doctorId: doctorId,
@@ -89,11 +87,13 @@ exports.create = async (req, res) => {
              <p> Your Default password is 123456
             `,
     }).catch((err) => {
+      console.log(err, "1errrrrrrrrrrrrrrrrrrrror");
       throw new Error(err);
     });
     res.status(201).send({ doctorData: doctorData, onboardData: onboardData });
   } catch (error) {
     rollbackOperation(doctorId);
+    console.log(error, "2errrrrrrrrrrrrrrrrrrrror");
     res.status(500).send({ message: "fail", error: error.message });
   }
 };
@@ -154,7 +154,7 @@ exports.findAll = async (req, res) => {
 exports.findOnboardingInitiated = async (req, res) => {
   ///////// where clause ///////////////
   //const code = req.query.code;
-  var condition = { currentAction: 'rd-approval' };
+  var condition = { currentAction: "rd-approval" };
   try {
     records = await Onboard.findAndCountAll({
       where: condition,
@@ -169,7 +169,6 @@ exports.findOnboardingInitiated = async (req, res) => {
     res.status(500).json({ data: [], message: "Error : " + e.message() });
   }
 };
-
 
 exports.update = (req, res) => {
   const id = req.params.id;
