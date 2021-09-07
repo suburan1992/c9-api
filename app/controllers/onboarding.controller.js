@@ -12,6 +12,7 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Agreement
 exports.create = async (req, res) => {
+  // Validate request
   if (!req.body.data.email) {
     res.status(400).send({
       message: "Content can not be empty!",
@@ -43,28 +44,34 @@ exports.create = async (req, res) => {
     ).catch((err) => {
       throw new Error(500);
     });
-    // console.log(req.body.data.opservice.length,"123456789");
+    console.log(req.body.opservice.length, "k345545456565656");
+    if (req.body.opservice.length > 0) {
+      opservicedata = req.body.opservice;
+      opservicedata.forEach((element) => {
+        element.doctorId = doctorId;
+      });
 
-    opservicedata = req.body.opservice;
-    opservicedata.forEach((element) => {
-      element.doctorId = doctorId;
-    });
-    doctoropdata = await DoctorOPParameter.bulkCreate(opservicedata).catch(
-      (err) => {
-        throw new Error(500);
-      }
-    );
-
-    ipservicedata = req.body.ipservice;
-    ipservicedata.forEach((element) => {
-      element.doctorId = doctorId;
-    });
-
-    doctoripdata = await DoctorIPParameter.bulkCreate(ipservicedata).catch(
-      (err) => {
-        throw new Error(500);
-      }
-    );
+      // opservicedata[0].doctorId = doctorId;
+      // opservicedata[1].doctorId = doctorId;
+      doctoropdata = await DoctorOPParameter.bulkCreate(opservicedata).catch(
+        (err) => {
+          throw new Error(500);
+        }
+      );
+    }
+    if (req.body.ipservice.length > 0) {
+      ipservicedata = req.body.ipservice;
+      ipservicedata.forEach((element) => {
+        element.doctorId = doctorId;
+      });
+      // ipservicedata[0].doctorId = doctorId;
+      // ipservicedata[1].doctorId = doctorId;
+      doctoripdata = await DoctorIPParameter.bulkCreate(ipservicedata).catch(
+        (err) => {
+          throw new Error(500);
+        }
+      );
+    }
 
     onboardData = {
       doctorId: doctorId,
@@ -87,13 +94,11 @@ exports.create = async (req, res) => {
              <p> Your Default password is 123456
             `,
     }).catch((err) => {
-      console.log(err, "1errrrrrrrrrrrrrrrrrrrror");
       throw new Error(err);
     });
     res.status(201).send({ doctorData: doctorData, onboardData: onboardData });
   } catch (error) {
     rollbackOperation(doctorId);
-    console.log(error, "2errrrrrrrrrrrrrrrrrrrror");
     res.status(500).send({ message: "fail", error: error.message });
   }
 };
@@ -193,6 +198,42 @@ exports.update = (req, res) => {
       });
     });
 };
+
+// exports.updateNew = async (req, res) => {
+//   const id = req.params.id;
+//   try{
+//   console.log("recieved id : ", id);
+//   doctorData = await User.findByPk(req.body.data.doctorId).catch((error) => { console.log("some error encountered - 1") });
+//   onboardData = {
+//     doctorId: req.body.data.doctorId,
+//     // region_id: region_id,
+//     name: req.body.data.fullname,
+//     currentAction: req.body.data.currentAction,
+//     currentActionBy: req.body.data.currentActionBy,
+//     nextAction: req.body.data.nextAction,
+//     status: 1,
+//   };
+
+//   onboardData = await Onboard.create(onboardData).catch((err) => { console.log("some error encountered - 2") });
+
+//   await sendEmail({
+//     to: doctorData.email,
+//     subject: "Onboard Status Changed",
+//     html: `
+//           Action taken on the onboarding process. Please check your dashboard.
+//           Current Action is ${req.body.data.currentAction}
+//           Next Action is ${req.body.data.nextAction}
+//           `,
+//   }).catch((err) => { console.log("some error encountered - 3") });
+//   }catch(e){
+//     console.log(e)
+//   }
+
+//   res.send({
+//     message: "Onboard was updated successfully.",
+//   });
+
+// }
 
 // exports.updateOnboardStatus = async (req, res) => {
 //   const id = req.params.id;
